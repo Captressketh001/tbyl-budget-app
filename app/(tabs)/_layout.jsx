@@ -1,7 +1,8 @@
-import { View, Text, Image } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import React, {useState} from 'react'
 import { Tabs, Redirect} from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomBottomDrawer from '../../components/CustomBottomDrawer';
 
 const TabIcon = ({icon, color, name, focused}) =>{
   return (
@@ -21,6 +22,11 @@ const TabIcon = ({icon, color, name, focused}) =>{
   )
 }
 const TabLayout = () => {
+  const [isDrawerVisible, setDrawerVisible] = useState(false);
+
+  const openDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
+
   return (
     <>
         <Tabs
@@ -78,7 +84,10 @@ const TabLayout = () => {
                   name=""
                   focused={focused}
                 />
-              )
+              ),
+              tabBarButton: (props) => (
+                <TouchableOpacity {...props} onPress={openDrawer} />
+              ),
             }}
             />
             <Tabs.Screen 
@@ -112,6 +121,7 @@ const TabLayout = () => {
             }}
             />
         </Tabs>
+        <CustomBottomDrawer visible={isDrawerVisible} onClose={closeDrawer} />
     </>
   )
 }
