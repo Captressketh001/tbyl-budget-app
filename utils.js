@@ -4,7 +4,7 @@ export const formatAmount = (amount) => {
     const formattedAmount = hasDecimal ? Math.abs(amount).toFixed(2) : Math.abs(amount);
     
     // Return formatted amount with the dollar sign
-    return amount < 0 ? `-$${formattedAmount}` : `$${formattedAmount}`;
+    return amount < 0 ? `-₦${formattedAmount}` : `₦${formattedAmount}`;
   };
 
 export const formatDate = (dateTime) => {

@@ -62,7 +62,7 @@ const Home = () => {
                   </View>
                   <View>
                     <Text className="text-[40px] text-white font-pmedium mt-2">
-                      {formatAmount(userTransactions?.balance) ?? 0}
+                      { formatAmount(Number(userTransactions?.balance)) ?? formatAmount(0)}
                     </Text>
                   </View>
 
@@ -78,7 +78,7 @@ const Home = () => {
                       <View>
                         <Text className="text-lg text-white">Expenses</Text>
                         <Text className="text-lg text-white">
-                          {formatAmount(userTransactions?.totalExpense) ?? 0}
+                          {formatAmount(Number(userTransactions?.totalExpense)) ?? formatAmount(0)}
                         </Text>
                       </View>
                     </View>
@@ -93,7 +93,7 @@ const Home = () => {
                       <View>
                         <Text className="text-lg text-white">Income</Text>
                         <Text className="text-lg text-white">
-                          {formatAmount(userTransactions?.totalIncome) ?? 0}
+                          {formatAmount(Number(userTransactions?.totalIncome)) ?? formatAmount(0)}
                         </Text>
                       </View>
                     </View>
