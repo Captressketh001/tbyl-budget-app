@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import TransactionCards from "../../components/TransactionCards";
 import EmptyState from "../../components/EmptyState";
 
+
 const Transactions = () => {
   const { user } = useGlobalContext();
   const { data: userTransactions, refetch } = useAppWrite(() =>

@@ -1,12 +1,10 @@
-import { View, Text, FlatList, RefreshControl } from "react-native";
+import { View, Text, FlatList, RefreshControl, ActivityIndicator  } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Button from "../../components/Button";
 import { getAllLatestTransactions } from "../../lib/appWrite";
-import { getAllLatestExpense } from "../../lib/appWrite";
-import { getAllLatestIncome } from "../../lib/appWrite";
 import { getUserTransactions } from "../../lib/appWrite";
 import useAppWrite from "../../lib/useAppWrite";
 import TransactionCards from "../../components/TransactionCards";
@@ -19,11 +17,9 @@ const Home = () => {
   const { data: transactions, refetch } = useAppWrite(() =>
     getAllLatestTransactions(user.$id)
   );
-  const { data: userTransactions } = useAppWrite(() =>
+  const { data: userTransactions, isLoading } = useAppWrite(() =>
     getUserTransactions(user.$id)
   );
-  const { data: income } = useAppWrite(() => getAllLatestIncome(user.$id));
-  const { data: expense } = useAppWrite(() => getAllLatestExpense(user.$id));
   const [selectedTab, setSelectedTab] = useState("All");
   const [refreshing, setRefreshing] = useState(false);
 
@@ -39,10 +35,10 @@ const Home = () => {
         <FlatList
           data={
             selectedTab === "All"
-              ? transactions
+              ? transactions.transactions
               : selectedTab === "Income"
-                ? income
-                : expense
+                ? transactions.incomes
+                : transactions.expenses
           }
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => <TransactionCards transactions={item} />}
@@ -62,7 +58,7 @@ const Home = () => {
                   </View>
                   <View>
                     <Text className="text-[40px] text-white font-pmedium mt-2">
-                      { formatAmount(Number(userTransactions?.balance)) ?? formatAmount(0)}
+                      { isLoading ? (<ActivityIndicator size="large" color="#fff" />) : formatAmount(Number(userTransactions?.balance)) || formatAmount(0)}
                     </Text>
                   </View>
 
@@ -77,9 +73,10 @@ const Home = () => {
                       </View>
                       <View>
                         <Text className="text-lg text-white">Expenses</Text>
-                        <Text className="text-lg text-white">
-                          {formatAmount(Number(userTransactions?.totalExpense)) ?? formatAmount(0)}
-                        </Text>
+                        {!isLoading ? <Text className="text-lg text-white">
+                           {formatAmount(Number(userTransactions?.totalExpense)) || formatAmount(0)}
+                        </Text> : 
+                        <ActivityIndicator size="large" color="#ffffff" className="mt-1" />}
                       </View>
                     </View>
                     <View className="flex-row items-center gap-2">
@@ -92,9 +89,12 @@ const Home = () => {
                       </View>
                       <View>
                         <Text className="text-lg text-white">Income</Text>
-                        <Text className="text-lg text-white">
-                          {formatAmount(Number(userTransactions?.totalIncome)) ?? formatAmount(0)}
-                        </Text>
+                        <View>
+                        {!isLoading ? <Text className="text-lg text-white">
+                           {formatAmount(Number(userTransactions?.totalIncome)) || formatAmount(0)}
+                        </Text> : 
+                        <ActivityIndicator size="large" color="#ffffff" className="mt-1" />}
+                      </View>
                       </View>
                     </View>
                   </View>
